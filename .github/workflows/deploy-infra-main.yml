@@ -5,7 +5,7 @@ on:
       - 'feature/*'
       - 'main'
     paths:
-      - 'infra'
+      - 'infra/*'
       - '.github/workflows/deploy-infra-main.yml'
 jobs:
   code_checks:
