@@ -21,6 +21,7 @@ jobs:
         run: terraform fmt -check -diff -recursive . 
   deploy_dev:
     runs-on: ubuntu-latest
+    needs: code_checks
     env: 
       ENVIRONMENT: 'dev'
       STATE_RESOURCE_GROUP_NAME: 'rg-dtype-state-dev'
@@ -36,10 +37,5 @@ jobs:
          creds: '${{ secrets.AZURE_CREDENTIALS }}'
       - name: Ensure TF state
         shell: pwsh
-        run: ./infra/setup-terraform-state.ps1
-        env:  
-          ENV: ${{ env.ENVIRONMENT }}
-          RESOURCE_GROUP: ${{ env.STATE_RESOURCE_GROUP_NAME }}
-          STORAGE_ACCOUNT: ${{ env.STATE_STORAGE_ACCOUNT_NAME }}
-          CONTAINER: ${{ env.STATE_CONTAINER_NAME }}
+        run: ./infra/setup-terraform-state.ps1 -env ${{env.ENVIRONMENT}} -resourceGroupName ${{env.STATE_RESOURCE_GROUP_NAME}} -storageAccountName ${{env.STATE_STORAGE_ACCOUNT_NAME}} -containerName ${{env.STATE_CONTAINER_NAME}}
      
