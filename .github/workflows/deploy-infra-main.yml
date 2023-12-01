@@ -38,4 +38,9 @@ jobs:
       - name: Ensure TF state
         shell: pwsh
         run: ./infra/setup-terraform-state.ps1 -env ${{env.ENVIRONMENT}} -resourceGroupName ${{env.STATE_RESOURCE_GROUP_NAME}} -storageAccountName ${{env.STATE_STORAGE_ACCOUNT_NAME}} -containerName ${{env.STATE_CONTAINER_NAME}}
-     
+      - name: 'Install Terraform'
+        uses: hashicorp/setup-terraform@v3
+        with:
+         terraform_version: "1.6.5"
+      - name: 'Terraform Init'
+        run: terraform init -var-file="infra/tfvars/dev.tfvars"
