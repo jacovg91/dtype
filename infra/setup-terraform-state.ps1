@@ -29,7 +29,8 @@ if ((az storage account check-name --name $storageAccountName --query 'nameAvail
         --name $storageAccountName `
         --sku Standard_ZRS `
         --kind StorageV2 `
-        --resource-group $resourceGroupName
+        --resource-group $resourceGroupName `
+        --auth-mode login
 }
 
 # Create storage account container for state file.
@@ -37,5 +38,6 @@ if ((az storage container exists --account-name $storageAccountName --name $cont
     Write-Output "Creating container..."
     az storage container create `
         --name $containerName `
-        --account-name $storageAccountName
+        --account-name $storageAccountName `
+        --auth-mode login
 }
