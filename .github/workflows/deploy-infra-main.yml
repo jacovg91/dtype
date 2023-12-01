@@ -1,7 +1,6 @@
 name: 'Deploy Azure infra using Terraform'
 on:
   push:
-
     branches:
       - '*'
 jobs:
