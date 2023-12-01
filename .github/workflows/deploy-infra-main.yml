@@ -1,10 +1,7 @@
-name: Deploy Azure infra using Terraform
+name: 'Deploy Azure infra using Terraform'
 on:
   push:
-    paths:
-      - 'infra'
-      - '.github/workflows/'
-      - '.github/workflows/deploy-infra-env.yml'
+
     branches:
       - '*'
 jobs:
