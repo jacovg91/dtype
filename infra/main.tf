@@ -1,4 +1,4 @@
 module "adls" {
-    source = "./modules/adls"
-    environment = var.environment
+  source      = "./modules/adls"
+  environment = var.environment
 }
