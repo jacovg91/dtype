@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - 'infra'
+      - '.github/workflows/deploy-infra-main.yml'
+      - '.github/workflows/deploy-infra-env.yml'
     branches:
       - '*'
 jobs:
