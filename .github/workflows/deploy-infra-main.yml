@@ -33,7 +33,7 @@ jobs:
         with:
          creds: '${{ secrets.AZURE_CREDENTIALS }}'
       - name: Ensure TF state
-        shell: powershell
+        shell: pwsh
         run: infra/setup-terraform-state.ps1
         env:  
           ENV: ${{ env.ENVIRONMENT }}
