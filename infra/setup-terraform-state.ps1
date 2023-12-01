@@ -22,7 +22,7 @@ if ((az group exists --name $resourceGroupName) -eq 'false') {
 }
 
 # Create storage account.
-if ((az storage account check-name --name $storageAccountName --query 'nameAvailable') -eq 'true') {
+if ((az storage account check-name --name $storageAccountName --query 'nameAvailable' --auth-mode login) -eq 'true') {
     Write-Output "Creating storage account..."
     az storage account create `
         --location $location `
@@ -33,7 +33,7 @@ if ((az storage account check-name --name $storageAccountName --query 'nameAvail
 }
 
 # Create storage account container for state file.
-if ((az storage container exists --account-name $storageAccountName --name $containerName --query 'exists') -eq 'false') {
+if ((az storage container exists --account-name $storageAccountName --name $containerName --query 'exists' --auth-mode login) -eq 'false') {
     Write-Output "Creating container..."
     az storage container create `
         --name $containerName `
