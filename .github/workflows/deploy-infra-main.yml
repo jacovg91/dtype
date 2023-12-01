@@ -28,13 +28,15 @@ jobs:
       STATE_CONTAINER_NAME: 'state'
       STATE_FILE_NAME: 'state.tfstate'
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Log in with Azure
         uses: azure/login@v1
         with:
          creds: '${{ secrets.AZURE_CREDENTIALS }}'
       - name: Ensure TF state
         shell: pwsh
-        run: ls #..\infra\setup-terraform-state.ps1
+        run: ./infra/setup-terraform-state.ps1
         env:  
           ENV: ${{ env.ENVIRONMENT }}
           RESOURCE_GROUP: ${{ env.STATE_RESOURCE_GROUP_NAME }}
