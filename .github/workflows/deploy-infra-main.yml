@@ -1,0 +1,14 @@
+name: 'Deploy Azure infra using Terraform'
+'on':
+  push:
+    branches:
+      - '*'
+    paths:
+      - 'infra'
+      - '.github/workflows/deploy-infra-main.yml'
+jobs:
+  code_checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
