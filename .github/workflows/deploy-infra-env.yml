@@ -1,0 +1,20 @@
+on:
+  
+parameters:
+  - name: environment
+    type: string
+  - name: condition
+    type: string
+
+jobs:
+  code_checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: 'Install Terraform'
+        uses: hashicorp/setup-terraform@v3
+        with:
+         terraform_version: "1.6.5"
+      - name: Linting
+        run: terraform fmt -check -diff -recursive . 

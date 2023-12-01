@@ -19,3 +19,12 @@ jobs:
          terraform_version: "1.6.5"
       - name: Linting
         run: terraform fmt -check -diff -recursive . 
+  deploy_dev:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure TF remote state
+        run: infra/setup-terraform-state.ps1
+      - name: Log in with Azure
+        uses: azure/login@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
