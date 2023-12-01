@@ -1,8 +1,10 @@
 name: Deploy Azure infra using Terraform
-'on':
+on:
   push:
     paths:
       - 'infra'
+    branches:
+      - '*'
 jobs:
   code_checks:
     runs-on: ubuntu-latest
