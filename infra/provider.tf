@@ -10,12 +10,7 @@ terraform {
   }
 
   # Remote state settings
-  backend "azurerm" {
-    resource_group_name  = var.state_resource_group_name
-    storage_account_name = var.state_storage_account_name
-    container_name       = var.state_storage_container_name
-    key                  = "state.tfstate"
-  }
+  backend "azurerm" {}
 }
 
 provider "azurerm" {
