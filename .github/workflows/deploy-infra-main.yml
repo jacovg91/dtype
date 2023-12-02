@@ -35,20 +35,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Az login
-        uses: azure/login@v1
-        with:
-         creds: '${{ secrets.AZURE_CREDENTIALS }}'
-      - name: Ensure TF state
-        shell: pwsh
-        run: ./infra/setup-terraform-state.ps1 -env ${{env.ENVIRONMENT}} -resourceGroupName ${{env.STATE_RESOURCE_GROUP_NAME}} -storageAccountName ${{env.STATE_STORAGE_ACCOUNT_NAME}} -containerName ${{env.STATE_CONTAINER_NAME}}
+      # - name: Az login
+      #   uses: azure/login@v1
+      #   with:
+      #    creds: '${{ secrets.AZURE_CREDENTIALS }}'
+      # - name: Ensure TF state
+      #   shell: pwsh
+      #   run: ./infra/setup-terraform-state.ps1 -env ${{env.ENVIRONMENT}} -resourceGroupName ${{env.STATE_RESOURCE_GROUP_NAME}} -storageAccountName ${{env.STATE_STORAGE_ACCOUNT_NAME}} -containerName ${{env.STATE_CONTAINER_NAME}}
       - name: 'Install Terraform'
         uses: hashicorp/setup-terraform@v3
         with:
          terraform_version: "1.6.5"
       - name: Set environment variables
         run: |
-          echo "Setting environment variables for Terraform"
           echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}"
           echo "ARM_TENANT_ID=${{ secrets.AZURE_CLIENT_SECRET }}"
           echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
