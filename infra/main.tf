@@ -23,7 +23,7 @@ data "azurerm_client_config" "current" {
 # Resource Groups
 # --------------------------
 
-resource "azurerm_resource_group" "storage_rg" {
+resource "azurerm_resource_group" "adls_rg" {
   name     = module.naming_storage.resource_group.name
   location = var.location
   tags     = local.common_tags
