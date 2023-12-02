@@ -28,6 +28,10 @@ jobs:
       STATE_STORAGE_ACCOUNT_NAME: 'stdtypestatedev'
       STATE_CONTAINER_NAME: 'state'
       STATE_FILE_NAME: 'state.tfstate'
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets. }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -42,6 +46,13 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
          terraform_version: "1.6.5"
+      - name: Set environment variables
+        run: |
+          echo "Setting environment variables for Terraform"
+          echo "ARM_CLIENT_ID=${ARM_CLIENT_ID}"
+          echo "ARM_TENANT_ID=${ARM_CLIENT_SECRET}"
+          echo "ARM_SUBSCRIPTION_ID=${ARM_SUBSCRIPTION_ID}"
+          echo "ARM_TENANT_ID=${ARM_TENANT_ID}"
       - name: 'Terraform Init'
         run: | 
           terraform init -backend-config="storage_account_name=${{env.STATE_STORAGE_ACCOUNT_NAME}}" -backend-config="container_name=${{env.STATE_CONTAINER_NAME}}" -backend-config="key=state.tfstate" 
