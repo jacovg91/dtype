@@ -71,3 +71,4 @@ module "adls" {
 #   key_vault_tenant_id                  = data.azurerm_client_config.current.tenant_id
 #   # log_analytics_workspace_id           = module.log_analytics.log_analytics_workspace_id
 # }
+
