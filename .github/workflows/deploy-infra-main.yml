@@ -21,6 +21,7 @@ jobs:
         run: terraform fmt -check -diff -recursive . 
   deploy_dev:
     runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main'
     needs: code_checks
     env: 
       ENVIRONMENT: 'dev'
