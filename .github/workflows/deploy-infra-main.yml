@@ -2,10 +2,10 @@ name: 'Deploy Azure infra using Terraform'
 on:
   push:
     branches:
-      - 'feature/*'
+      - 'feature/**'
       - 'main'
     paths:
-      - 'infra/*'
+      - 'infra/**'
       - '.github/workflows/deploy-infra-main.yml'
 jobs:
   code_checks:
@@ -24,7 +24,7 @@ jobs:
     needs: code_checks
     env: 
       ENVIRONMENT: 'dev'
-      STATE_RESOURCE_GROUP_NAME: 'rg-dtype-state-dev'
+      STATE_RESOURCE_GROUP_NAME: 'rg-state-dtype-dev'
       STATE_STORAGE_ACCOUNT_NAME: 'stdtypestatedev'
       STATE_CONTAINER_NAME: 'state'
       STATE_FILE_NAME: 'state.tfstate'

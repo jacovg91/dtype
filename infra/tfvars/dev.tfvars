@@ -1,5 +1,1 @@
-environment                  = "dev"
-subscription_id              = "8471d9e5-d4c4-40e4-8054-49cc9858c0e3"
-state_resource_group_name    = "rg-dtype-state-dev"
-state_storage_account_name   = "stdtypestatedev"
-state_storage_container_name = "state"
+environment = "dev"
