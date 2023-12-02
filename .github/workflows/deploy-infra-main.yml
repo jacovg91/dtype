@@ -58,15 +58,16 @@ jobs:
         working-directory: infra
       - name: 'Terraform Plan'
         run: |
-          cd infra
           terraform plan -var-file="tfvars/dev.tfvars"
+        working-directory: infra
       - name: Manual validation
         uses: trstringer/manual-approval@v1
         with:
-          secret: ${{ github.TOKEN }}
+          secret: ${{ secrets.GITHUB_TOKEN }}
           approvers: jacovg91
+          minimum-approvals: 1
       - name: 'Terraform apply'
         run: |
-          cd infra
           terraform apply --auto-approve -var-file="tfvars/dev.tfvars"
+        working-directory: infra
       
