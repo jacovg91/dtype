@@ -67,8 +67,8 @@ module "adls" {
 
 # Key Vault
 module "key_vault" {
-  source   = "./modules/key-vault"
-  location = var.location
+  source                               = "./modules/key-vault"
+  location                             = var.location
   resource_group_name                  = azurerm_resource_group.key_vault_rg.name
   key_vault_sku_name                   = "standard"
   key_vault_name                       = module.naming.key_vault.name
