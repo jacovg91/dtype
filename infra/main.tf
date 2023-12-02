@@ -70,7 +70,7 @@ module "key_vault" {
   source   = "./modules/key-vault"
   location = var.location
   #tags                                 = var.tags
-  key_vault_resource_group_name        = azurerm_resource_group.key_vault_rg.name
+  resouresource_group_name =         = azurerm_resource_group.key_vault_rg.name
   key_vault_sku_name                   = "standard"
   key_vault_name                       = module.naming.key_vault.name
   key_vault_soft_delete_retention_days = "90"
