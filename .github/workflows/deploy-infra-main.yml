@@ -45,10 +45,8 @@ jobs:
       - name: 'Terraform Init'
         run: | 
           cd infra
-          terraform init \
-            -backend-config="storage_account_name=${{env.STATE_STORAGE_ACCOUNT_NAME}}" \
-            -backend-config="container_name=${{env.STATE_CONTAINER_NAME}}" \
-            -backend-config="key=state.tfstate" 
+          terraform init -backend-config="storage_account_name=${{env.STATE_STORAGE_ACCOUNT_NAME}}" -backend-config="container_name=${{env.STATE_CONTAINER_NAME}}" -backend-config="key=state.tfstate" 
+        working-directory: infra
       - name: 'Terraform Plan'
         run: |
           cd infra
