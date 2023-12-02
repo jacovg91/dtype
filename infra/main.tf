@@ -69,12 +69,10 @@ module "adls" {
 module "key_vault" {
   source   = "./modules/key-vault"
   location = var.location
-  #tags                                 = var.tags
   resource_group_name                  = azurerm_resource_group.key_vault_rg.name
   key_vault_sku_name                   = "standard"
   key_vault_name                       = module.naming.key_vault.name
   key_vault_soft_delete_retention_days = "90"
   key_vault_tenant_id                  = data.azurerm_client_config.current.tenant_id
-  # log_analytics_workspace_id           = module.log_analytics.log_analytics_workspace_id
 }
 
