@@ -54,7 +54,7 @@ module "naming_key_vault" {
 module "adls" {
   source               = "./modules/adls"
   environment          = var.environment
-  resource_group_name  = azurerm_resource_group.storage_rg.name
+  resource_group_name  = azurerm_resource_group.adls_rg.name
   location             = var.location
   storage_account_name = module.naming.storage_account.name
 }
