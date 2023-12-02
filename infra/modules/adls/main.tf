@@ -15,6 +15,6 @@ resource "azurerm_storage_account" "datalake" {
 }
 
 resource "azurerm_storage_container" "adls_container" {
-  name = "lake"
-  storage_account_name = azurerm_storage_account.datalake.name 
+  name                 = "lake"
+  storage_account_name = azurerm_storage_account.datalake.name
 }
