@@ -35,13 +35,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      # - name: Az login
-      #   uses: azure/login@v1
-      #   with:
-      #    creds: '${{ secrets.AZURE_CREDENTIALS }}'
-      # - name: Ensure TF state
-      #   shell: pwsh
-      #   run: ./infra/setup-terraform-state.ps1 -env ${{env.ENVIRONMENT}} -resourceGroupName ${{env.STATE_RESOURCE_GROUP_NAME}} -storageAccountName ${{env.STATE_STORAGE_ACCOUNT_NAME}} -containerName ${{env.STATE_CONTAINER_NAME}}
+      - name: Az login
+        uses: azure/login@v1
+        with:
+         creds: '${{ secrets.AZURE_CREDENTIALS }}'
+      - name: Ensure TF state
+        shell: pwsh
+        run: ./infra/setup-terraform-state.ps1 -env ${{env.ENVIRONMENT}} -resourceGroupName ${{env.STATE_RESOURCE_GROUP_NAME}} -storageAccountName ${{env.STATE_STORAGE_ACCOUNT_NAME}} -containerName ${{env.STATE_CONTAINER_NAME}}
       - name: 'Install Terraform'
         uses: hashicorp/setup-terraform@v3
         with:
