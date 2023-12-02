@@ -13,3 +13,8 @@ resource "azurerm_storage_account" "datalake" {
   enable_https_traffic_only = true
   min_tls_version           = "TLS1_2"
 }
+
+resource "azurerm_storage_container" "adls_container" {
+  name = "lake"
+  storage_account_name = azurerm_storage_account.datalake.name 
+}
