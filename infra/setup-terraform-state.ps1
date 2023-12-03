@@ -14,7 +14,7 @@ param (
 # Vars
 $location = "westeurope"
 
-az account set --name $subscriptionId
+az account set --subscription $subscriptionId
 
 # Create resource group.
 if ((az group exists --name $resourceGroupName) -eq 'false') {
