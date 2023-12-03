@@ -120,6 +120,15 @@ resource "databricks_secret" "service_principal_key" {
   ]
 }
 
+resource "databricks_secret" "adls_key" {
+  key          = "adls-storage-key"
+  string_value = module.adls.storage_account_primary_access_key
+  scope        = databricks_secret_scope.kv_scope.name
+  depends_on = [
+    module.databricks_workspace
+  ]
+}
+
 data "databricks_node_type" "smallest" {
   local_disk = true
   depends_on = [
@@ -158,7 +167,7 @@ resource "databricks_mount" "mounting_filesystems" {
     storage_account_name = module.adls.storage_account_name
     auth_type            = "ACCESS_KEY"
     token_secret_scope   = databricks_secret_scope.kv_scope.name
-    token_secret_key     = databricks_secret_scope.kv_scope.key
+    token_secret_key     = databricks_secret.adls_key.key
   }
 
   depends_on = [
