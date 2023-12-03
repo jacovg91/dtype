@@ -21,6 +21,7 @@ jobs:
         run: terraform fmt -check -diff -recursive . 
   deploy_dev:
     runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main'
     needs: code_checks
     env: 
       ENVIRONMENT: 'dev'
@@ -66,6 +67,48 @@ jobs:
           secret: ${{ secrets.GITHUB_TOKEN }}
           approvers: jacovg91
           minimum-approvals: 1
+      - name: 'Terraform apply'
+        run: |
+          terraform apply --auto-approve -var-file="tfvars/dev.tfvars"
+        working-directory: infra
+  deploy_prd:
+    runs-on: ubuntu-latest
+    needs: code_checks
+    if: github.ref == 'refs/heads/main' # only run this job from the main branch. 
+    env: 
+      ENVIRONMENT: 'dev'
+      STATE_RESOURCE_GROUP_NAME: 'rg-state-dtype-prd'
+      STATE_STORAGE_ACCOUNT_NAME: 'stdtypestateprd'
+      STATE_CONTAINER_NAME: 'state'
+      STATE_FILE_NAME: 'state.tfstate'
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Az login
+        uses: azure/login@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+      - name: Ensure TF state
+        shell: pwsh
+        run: ./infra/setup-terraform-state.ps1 -env ${{env.ENVIRONMENT}} -resourceGroupName ${{env.STATE_RESOURCE_GROUP_NAME}} -storageAccountName ${{env.STATE_STORAGE_ACCOUNT_NAME}} -containerName ${{env.STATE_CONTAINER_NAME}}
+      - name: 'Install Terraform'
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.6.5"
+      - name: Set environment variables
+        run: |
+          echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}"
+          echo "ARM_TENANT_ID=${{ secrets.AZURE_CLIENT_SECRET }}"
+          echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+          echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}"
+      - name: 'Terraform Init'
+        run: | 
+          terraform init -backend-config="resource_group_name=${{env.STATE_RESOURCE_GROUP_NAME}}" -backend-config="storage_account_name=${{env.STATE_STORAGE_ACCOUNT_NAME}}" -backend-config="container_name=${{env.STATE_CONTAINER_NAME}}" -backend-config="key=state.tfstate" 
+        working-directory: infra
       - name: 'Terraform apply'
         run: |
           terraform apply --auto-approve -var-file="tfvars/dev.tfvars"
