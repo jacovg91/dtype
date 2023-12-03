@@ -20,6 +20,6 @@ variable "service_principal_secret" {
 }
 
 variable "databricks_mounts" {
-  type    = list(string)
+  type    = set(string)
   default = ["lake"]
 }
