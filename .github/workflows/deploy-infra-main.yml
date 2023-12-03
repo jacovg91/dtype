@@ -59,7 +59,7 @@ jobs:
         working-directory: infra
       - name: 'Terraform Plan'
         run: |
-          terraform plan -var-file="tfvars/dev.tfvars"
+          terraform plan -var-file="tfvars/dev.tfvars" -var="service_principal_name=Github" -var="service_principal_secret=${{ secrets.AZURE_CLIENT_SECRET }}"
         working-directory: infra
       - name: Manual validation
         uses: trstringer/manual-approval@v1
@@ -69,7 +69,7 @@ jobs:
           minimum-approvals: 1
       - name: 'Terraform apply'
         run: |
-          terraform apply --auto-approve -var-file="tfvars/dev.tfvars"
+          terraform apply --auto-approve -var-file="tfvars/dev.tfvars" -var="service_principal_name=Github" -var="service_principal_secret=${{ secrets.AZURE_CLIENT_SECRET }}"
         working-directory: infra
   deploy_prd:
     runs-on: ubuntu-latest
@@ -111,6 +111,6 @@ jobs:
         working-directory: infra
       - name: 'Terraform apply'
         run: |
-          terraform apply --auto-approve -var-file="tfvars/prd.tfvars"
+          terraform apply --auto-approve -var-file="tfvars/prd.tfvars" -var="service_principal_name=Github" -var="service_principal_secret=${{ secrets.AZURE_CLIENT_SECRET }}"
         working-directory: infra
       

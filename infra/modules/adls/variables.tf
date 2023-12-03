@@ -54,3 +54,7 @@ variable "storage_account_replication_type" {
     error_message = "Variable storage_account_replication_type must be one of LRS, GRS, RAGRS, ZRS, GZRS and RAGZRS."
   }
 }
+
+variable "service_principal_client_id" {
+  type = string  
+}

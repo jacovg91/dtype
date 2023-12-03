@@ -19,6 +19,10 @@ locals {
 data "azurerm_client_config" "current" {
 }
 
+data "azuread_service_principal" "service_principal" {
+  display_name = var.service_principal_name
+}
+
 # --------------------------
 # Resource Groups
 # --------------------------
@@ -68,7 +72,6 @@ module "naming_databricks" {
   suffix = ["dbw", local.project_name, var.environment]
 }
 
-
 # Storage
 module "adls" {
   source               = "./modules/adls"
@@ -76,6 +79,7 @@ module "adls" {
   resource_group_name  = azurerm_resource_group.adls_rg.name
   location             = var.location
   storage_account_name = module.naming.storage_account.name
+  service_principal_client_id = data.azuread_service_principal.service_principal.object_id
 }
 
 # Key Vault
@@ -96,4 +100,69 @@ module "databricks_workspace" {
   databricks_workspace_name                        = module.naming.databricks_workspace.name
   databricks_workspace_managed_resource_group_name = "rg-m-dbw-dtype-${var.environment}"
   location                                         = var.location
+}
+
+resource "databricks_secret_scope" "kv_scope" {
+  name = "keyvault-managed"
+
+  keyvault_metadata {
+    resource_id = module.key_vault.key_vault_id
+    dns_name    = module.key_vault.key_vault_url
+  }
+}
+
+resource "databricks_secret" "service_principal_key" {
+  key          = "service-principal-key"
+  string_value = var.service_principal_secret
+  scope        = databricks_secret_scope.dbw_scope.name
+  depends_on = [
+    module.databricks_workspace
+  ]
+}
+
+data "databricks_node_type" "smallest" {
+  local_disk = true
+  depends_on = [
+    module.databricks_workspace
+  ]
+}
+
+data "databricks_spark_version" "latest_lts" {
+  long_term_support = true
+  depends_on = [
+    module.databricks_workspace
+  ]
+}
+
+resource "databricks_cluster" "mounter" {
+  cluster_name            = "Mounter"
+  spark_version           = data.databricks_spark_version.latest_lts.id
+  node_type_id            = data.databricks_node_type.smallest.id
+  autotermination_minutes = 10
+  autoscale {
+    min_workers = 1
+    max_workers = 1
+  }
+  depends_on = [
+    module.databricks_workspace,
+    module.adls
+  ]
+}
+
+resource "databricks_mount" "mounting_filesystems" {
+  for_each   = var.databricks_mounts
+  name       = each.value
+  cluster_id = databricks_cluster.mounter.id
+  wasb {
+    container_name       = each.value
+    storage_account_name = module.adls.storage_account_name
+    auth_type            = "ACCESS_KEY"
+    token_secret_scope   = databricks_secret_scope.kv_scope.name
+    token_secret_key     = databricks_secret.databricks_secret_scope.key
+  }
+
+  depends_on = [
+    module.databricks_workspace,
+    module.adls
+  ]
 }
