@@ -36,7 +36,7 @@ resource "azurerm_resource_group" "key_vault_rg" {
 }
 
 resource "azurerm_resource_group" "databricks_rg" {
-  name     = module.naming_key_vault.resource_group.name
+  name     = module.naming_databricks.resource_group.name
   location = var.location
   tags     = local.common_tags
 }
