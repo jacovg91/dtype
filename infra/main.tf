@@ -53,7 +53,7 @@ resource "azurerm_resource_group" "databricks_rg" {
 # Modules
 # --------------------------
 
-# Naming
+# Naming (taken from https://github.com/Azure/terraform-azurerm-naming)
 module "naming" {
   source = "./modules/utilities/naming"
   suffix = [local.project_name, var.environment]
@@ -142,25 +142,10 @@ resource "databricks_secret" "adls_key" {
     module.key_vault
   ]
 }
-
-data "databricks_node_type" "smallest" {
-  local_disk = true
-  depends_on = [
-    module.databricks_workspace
-  ]
-}
-
-data "databricks_spark_version" "latest_lts" {
-  long_term_support = true
-  depends_on = [
-    module.databricks_workspace
-  ]
-}
-
 resource "databricks_cluster" "mounter" {
   cluster_name            = "Mounter"
-  spark_version           = data.databricks_spark_version.latest_lts.id
-  node_type_id            = data.databricks_node_type.smallest.id
+  spark_version           = "13.3.x-scala2.12"
+  node_type_id            = "Standard_F4s"
   autotermination_minutes = 10
   autoscale {
     min_workers = 1
