@@ -35,6 +35,12 @@ resource "azurerm_resource_group" "key_vault_rg" {
   tags     = local.common_tags
 }
 
+resource "azurerm_resource_group" "databricks_rg" {
+  name     = module.naming_databricks.resource_group.name
+  location = var.location
+  tags     = local.common_tags
+}
+
 # --------------------------
 # Modules
 # --------------------------
@@ -56,6 +62,13 @@ module "naming_key_vault" {
   suffix = ["kv", local.project_name, var.environment]
 }
 
+# Naming Databricks
+module "naming_databricks" {
+  source = "./modules/utilities/naming"
+  suffix = ["dbw", local.project_name, var.environment]
+}
+
+
 # Storage
 module "adls" {
   source               = "./modules/adls"
@@ -76,3 +89,11 @@ module "key_vault" {
   key_vault_tenant_id                  = data.azurerm_client_config.current.tenant_id
 }
 
+# Databricks workspace
+module "databricks_workspace" {
+  source                                           = "./modules/databricks/workspace"
+  resource_group_name                              = azurerm_resource_group.databricks_rg.name
+  databricks_workspace_name                        = module.naming.databricks_workspace.name
+  databricks_workspace_managed_resource_group_name = "rg-m-dbw-dtype-${var.environment}"
+  location                                         = var.location
+}
