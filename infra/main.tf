@@ -74,11 +74,11 @@ module "naming_databricks" {
 
 # Storage
 module "adls" {
-  source               = "./modules/adls"
-  environment          = var.environment
-  resource_group_name  = azurerm_resource_group.adls_rg.name
-  location             = var.location
-  storage_account_name = module.naming.storage_account.name
+  source                      = "./modules/adls"
+  environment                 = var.environment
+  resource_group_name         = azurerm_resource_group.adls_rg.name
+  location                    = var.location
+  storage_account_name        = module.naming.storage_account.name
   service_principal_client_id = data.azuread_service_principal.service_principal.object_id
 }
 

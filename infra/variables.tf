@@ -12,11 +12,11 @@ variable "location" {
 }
 
 variable "service_principal_name" {
-  type = string  
+  type = string
 }
 
 variable "service_principal_secret" {
-  type = string  
+  type = string
 }
 
 variable "databricks_mounts" {

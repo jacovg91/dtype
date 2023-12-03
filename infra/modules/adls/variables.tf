@@ -56,5 +56,5 @@ variable "storage_account_replication_type" {
 }
 
 variable "service_principal_client_id" {
-  type = string  
+  type = string
 }
