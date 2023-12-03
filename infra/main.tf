@@ -23,6 +23,10 @@ data "azuread_service_principal" "service_principal" {
   display_name = var.service_principal_name
 }
 
+data "azuread_service_principal" "dbw_sp" {
+  display_name = "AzureDatabricks"
+}
+
 # --------------------------
 # Resource Groups
 # --------------------------
@@ -95,10 +99,10 @@ module "key_vault" {
   service_principal_client_id          = data.azuread_service_principal.service_principal.object_id
 }
 
-resource "azurerm_key_vault_access_policy" "spn_kv_admin_access_policies" {
+resource "azurerm_key_vault_access_policy" "databricks_secret_scope_policies" {
   key_vault_id = module.key_vault.key_vault_id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = module.databricks_workspace.databricks_workspace_workspace_id
+  object_id    = azuread_service_principal.dbw_sp.object_id
 
   key_permissions    = []
   secret_permissions = ["Get", "List", "Set", "Delete", "Purge"]
