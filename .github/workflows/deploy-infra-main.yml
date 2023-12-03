@@ -111,6 +111,6 @@ jobs:
         working-directory: infra
       - name: 'Terraform apply'
         run: |
-          terraform apply --auto-approve -var-file="tfvars/dev.tfvars"
+          terraform apply --auto-approve -var-file="tfvars/prd.tfvars"
         working-directory: infra
       
