@@ -213,7 +213,7 @@ resource "databricks_metastore" "metastore" {
   name  = "dtype-store-we"
   storage_root = format("abfss://%s@%s.dfs.core.windows.net/",
     azurerm_storage_container.unity_catalog[0].name,
-    azurerm_storage_account.unity_catalog_metastore_storage[0].name)
+  azurerm_storage_account.unity_catalog_metastore_storage[0].name)
   owner         = "contact@innovion.nl"
   region        = "westeurope"
   force_destroy = true
