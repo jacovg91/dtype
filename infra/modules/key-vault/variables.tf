@@ -13,6 +13,10 @@ variable "location" {
   }
 }
 
+variable "tenant_id" {
+  type = string
+}
+
 variable "tags" {
   description = "A mapping of tags to assign to the resources"
   type        = map(string)
@@ -68,9 +72,6 @@ variable "key_vault_enable_rbac_authorization" {
   default     = false
 }
 
-# Logging
-variable "log_analytics_workspace_id" {
-  description = "The resource id of the log analytics workspace e.g. /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/mygroup1/providers/Microsoft.OperationalInsights/workspaces/workspace1"
-  type        = string
-  default     = ""
+variable "service_principal_client_id" {
+  type = string
 }

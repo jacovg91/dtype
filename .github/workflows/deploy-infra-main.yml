@@ -47,19 +47,13 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
          terraform_version: "1.6.5"
-      - name: Set environment variables
-        run: |
-          echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}"
-          echo "ARM_TENANT_ID=${{ secrets.AZURE_CLIENT_SECRET }}"
-          echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-          echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}"
       - name: 'Terraform Init'
         run: | 
-          terraform init -backend-config="resource_group_name=${{env.STATE_RESOURCE_GROUP_NAME}}" -backend-config="storage_account_name=${{env.STATE_STORAGE_ACCOUNT_NAME}}" -backend-config="container_name=${{env.STATE_CONTAINER_NAME}}" -backend-config="key=state.tfstate" 
+          terraform init -backend-config="resource_group_name=${{env.STATE_RESOURCE_GROUP_NAME}}" -backend-config="storage_account_name=${{env.STATE_STORAGE_ACCOUNT_NAME}}" -backend-config="container_name=${{env.STATE_CONTAINER_NAME}}" -backend-config="key=${{env.STATE_FILE_NAME}}" 
         working-directory: infra
       - name: 'Terraform Plan'
         run: |
-          terraform plan -var-file="tfvars/dev.tfvars"
+          terraform plan -var-file="tfvars/dev.tfvars" -var="service_principal_name=Github" -var="service_principal_secret=${{ secrets.AZURE_CLIENT_SECRET }}"
         working-directory: infra
       - name: Manual validation
         uses: trstringer/manual-approval@v1
@@ -69,7 +63,7 @@ jobs:
           minimum-approvals: 1
       - name: 'Terraform apply'
         run: |
-          terraform apply --auto-approve -var-file="tfvars/dev.tfvars"
+          terraform apply --auto-approve -var-file="tfvars/dev.tfvars" -var="service_principal_name=Github" -var="service_principal_secret=${{ secrets.AZURE_CLIENT_SECRET }}"
         working-directory: infra
   deploy_prd:
     runs-on: ubuntu-latest
@@ -99,18 +93,12 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.6.5"
-      - name: Set environment variables
-        run: |
-          echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}"
-          echo "ARM_TENANT_ID=${{ secrets.AZURE_CLIENT_SECRET }}"
-          echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-          echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}"
       - name: 'Terraform Init'
         run: | 
-          terraform init -backend-config="resource_group_name=${{env.STATE_RESOURCE_GROUP_NAME}}" -backend-config="storage_account_name=${{env.STATE_STORAGE_ACCOUNT_NAME}}" -backend-config="container_name=${{env.STATE_CONTAINER_NAME}}" -backend-config="key=state.tfstate" 
+          terraform init -backend-config="resource_group_name=${{env.STATE_RESOURCE_GROUP_NAME}}" -backend-config="storage_account_name=${{env.STATE_STORAGE_ACCOUNT_NAME}}" -backend-config="container_name=${{env.STATE_CONTAINER_NAME}}" -backend-config="key=${{env.STATE_FILE_NAME}}" 
         working-directory: infra
       - name: 'Terraform apply'
         run: |
-          terraform apply --auto-approve -var-file="tfvars/prd.tfvars"
+          terraform apply --auto-approve -var-file="tfvars/prd.tfvars" -var="service_principal_name=Github" -var="service_principal_secret=${{ secrets.AZURE_CLIENT_SECRET }}"
         working-directory: infra
       

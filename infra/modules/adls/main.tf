@@ -18,3 +18,10 @@ resource "azurerm_storage_container" "adls_container" {
   name                 = "lake"
   storage_account_name = azurerm_storage_account.datalake.name
 }
+
+# The service principal needs access to the storage account for databricks mounting.
+resource "azurerm_role_assignment" "sbdc" {
+  scope                = azurerm_storage_account.datalake.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = var.service_principal_client_id
+}

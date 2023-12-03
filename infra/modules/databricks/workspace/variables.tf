@@ -54,11 +54,3 @@ variable "databricks_workspace_secure_cluster_connectivity" {
   type        = bool
   default     = true
 }
-
-
-# Logging
-variable "log_analytics_workspace_id" {
-  description = "The resource id of the log analytics workspace e.g. /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/mygroup1/providers/Microsoft.OperationalInsights/workspaces/workspace1"
-  type        = string
-  default     = ""
-}
