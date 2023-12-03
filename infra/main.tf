@@ -118,12 +118,9 @@ module "databricks_workspace" {
 }
 
 resource "databricks_secret_scope" "kv_scope" {
-  name = "keyvault-managed"
+  name = "databricks-secrets"
 
-  keyvault_metadata {
-    resource_id = module.key_vault.key_vault_id
-    dns_name    = module.key_vault.key_vault_url
-  }
+  depends_on = [module.databricks_workspace]
 }
 
 resource "databricks_secret" "service_principal_key" {
