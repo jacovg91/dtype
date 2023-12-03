@@ -99,10 +99,10 @@ module "key_vault" {
   service_principal_client_id          = data.azuread_service_principal.service_principal.object_id
 }
 
-resource "azurerm_key_vault_access_policy" "databricks_secret_scope_policies" {
-  key_vault_id = module.key_vault.key_vault_id
+resource "azurerm_key_vault_access_policy" "spn_kv_admin_access_policies" {
+  key_vault_id = azurerm_key_vault.keyvault.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azuread_service_principal.dbw_sp.object_id
+  object_id    = data.azuread_service_principal.service_principal.object_id
 
   key_permissions    = []
   secret_permissions = ["Get", "List", "Set", "Delete", "Purge"]

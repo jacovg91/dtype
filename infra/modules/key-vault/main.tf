@@ -20,12 +20,3 @@ resource "azurerm_key_vault" "keyvault" {
     ]
   }
 }
-
-resource "azurerm_key_vault_access_policy" "spn_kv_admin_access_policies" {
-  key_vault_id = azurerm_key_vault.keyvault.id
-  tenant_id    = var.tenant_id
-  object_id    = var.service_principal_client_id
-
-  key_permissions    = []
-  secret_permissions = ["Get", "List", "Set", "Delete", "Purge"]
-}
