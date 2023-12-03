@@ -91,6 +91,8 @@ module "key_vault" {
   key_vault_name                       = module.naming.key_vault.name
   key_vault_soft_delete_retention_days = "90"
   key_vault_tenant_id                  = data.azurerm_client_config.current.tenant_id
+  tenant_id                            = data.azurerm_client_config.current.tenant_id
+  service_principal_client_id          = data.azuread_service_principal.service_principal.object_id
 }
 
 # Databricks workspace
@@ -116,7 +118,8 @@ resource "databricks_secret" "service_principal_key" {
   string_value = var.service_principal_secret
   scope        = databricks_secret_scope.kv_scope.name
   depends_on = [
-    module.databricks_workspace
+    module.databricks_workspace,
+    module.module.key_vault
   ]
 }
 
@@ -125,7 +128,8 @@ resource "databricks_secret" "adls_key" {
   string_value = module.adls.storage_account_primary_access_key
   scope        = databricks_secret_scope.kv_scope.name
   depends_on = [
-    module.databricks_workspace
+    module.databricks_workspace,
+    module.module.key_vault
   ]
 }
 

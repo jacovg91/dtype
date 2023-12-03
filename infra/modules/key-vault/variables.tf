@@ -13,6 +13,10 @@ variable "location" {
   }
 }
 
+variable "tenant_id" {
+  type = string
+}
+
 variable "tags" {
   description = "A mapping of tags to assign to the resources"
   type        = map(string)
@@ -66,4 +70,8 @@ variable "key_vault_enable_rbac_authorization" {
   description = "Boolean to enable rbac authorization on key vault resource. Disabled by default."
   type        = bool
   default     = false
+}
+
+variable "service_principal_client_id" {
+  type = string
 }
