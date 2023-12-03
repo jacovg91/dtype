@@ -158,7 +158,7 @@ resource "databricks_mount" "mounting_filesystems" {
     storage_account_name = module.adls.storage_account_name
     auth_type            = "ACCESS_KEY"
     token_secret_scope   = databricks_secret_scope.kv_scope.name
-    token_secret_key     = databricks_secret.databricks_secret_scope.key
+    token_secret_key     = databricks_secret_scope.kv_scope.key
   }
 
   depends_on = [
