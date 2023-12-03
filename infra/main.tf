@@ -119,7 +119,7 @@ resource "databricks_secret" "service_principal_key" {
   scope        = databricks_secret_scope.kv_scope.name
   depends_on = [
     module.databricks_workspace,
-    module.module.key_vault
+    module.key_vault
   ]
 }
 
@@ -129,7 +129,7 @@ resource "databricks_secret" "adls_key" {
   scope        = databricks_secret_scope.kv_scope.name
   depends_on = [
     module.databricks_workspace,
-    module.module.key_vault
+    module.key_vault
   ]
 }
 
