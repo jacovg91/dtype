@@ -95,6 +95,15 @@ module "key_vault" {
   service_principal_client_id          = data.azuread_service_principal.service_principal.object_id
 }
 
+resource "azurerm_key_vault_access_policy" "spn_kv_admin_access_policies" {
+  key_vault_id = module.key_vault.key_vault_id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = module.databricks_workspace.databricks_workspace_workspace_id
+
+  key_permissions    = []
+  secret_permissions = ["Get", "List", "Set", "Delete", "Purge"]
+}
+
 # Databricks workspace
 module "databricks_workspace" {
   source                                           = "./modules/databricks/workspace"
@@ -111,15 +120,6 @@ resource "databricks_secret_scope" "kv_scope" {
     resource_id = module.key_vault.key_vault_id
     dns_name    = module.key_vault.key_vault_url
   }
-}
-
-resource "azurerm_key_vault_access_policy" "spn_kv_admin_access_policies" {
-  key_vault_id = module.key_vault.key_vault_id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = module.databricks_workspace.databricks_workspace_id
-
-  key_permissions    = []
-  secret_permissions = ["Get", "List", "Set", "Delete", "Purge"]
 }
 
 resource "databricks_secret" "service_principal_key" {
@@ -141,7 +141,6 @@ resource "databricks_secret" "adls_key" {
     module.key_vault
   ]
 }
-
 
 data "databricks_node_type" "smallest" {
   local_disk = true
