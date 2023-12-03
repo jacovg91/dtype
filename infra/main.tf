@@ -114,7 +114,7 @@ resource "databricks_secret_scope" "kv_scope" {
 resource "databricks_secret" "service_principal_key" {
   key          = "service-principal-key"
   string_value = var.service_principal_secret
-  scope        = databricks_secret_scope.dbw_scope.name
+  scope        = databricks_secret_scope.kv_scope.name
   depends_on = [
     module.databricks_workspace
   ]
