@@ -42,7 +42,7 @@ jobs:
          creds: '${{ secrets.AZURE_CREDENTIALS }}'
       - name: Ensure TF state
         shell: pwsh
-        run: ./infra/setup-terraform-state.ps1 -env ${{env.ENVIRONMENT}} -resourceGroupName ${{env.STATE_RESOURCE_GROUP_NAME}} -storageAccountName ${{env.STATE_STORAGE_ACCOUNT_NAME}} -containerName ${{env.STATE_CONTAINER_NAME}}
+        run: ./infra/setup-terraform-state.ps1 -env ${{env.ENVIRONMENT}} -subscriptionId $${{env.ARM_SUBSCRIPTION_ID}} -resourceGroupName ${{env.STATE_RESOURCE_GROUP_NAME}} -storageAccountName ${{env.STATE_STORAGE_ACCOUNT_NAME}} -containerName ${{env.STATE_CONTAINER_NAME}}
       - name: 'Install Terraform'
         uses: hashicorp/setup-terraform@v3
         with:
@@ -76,7 +76,7 @@ jobs:
     needs: code_checks
     if: github.ref == 'refs/heads/main' # only run this job from the main branch. 
     env: 
-      ENVIRONMENT: 'dev'
+      ENVIRONMENT: 'prd'
       STATE_RESOURCE_GROUP_NAME: 'rg-state-dtype-prd'
       STATE_STORAGE_ACCOUNT_NAME: 'stdtypestateprd'
       STATE_CONTAINER_NAME: 'state'
@@ -94,7 +94,7 @@ jobs:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
       - name: Ensure TF state
         shell: pwsh
-        run: ./infra/setup-terraform-state.ps1 -env ${{env.ENVIRONMENT}} -resourceGroupName ${{env.STATE_RESOURCE_GROUP_NAME}} -storageAccountName ${{env.STATE_STORAGE_ACCOUNT_NAME}} -containerName ${{env.STATE_CONTAINER_NAME}}
+        run: ./infra/setup-terraform-state.ps1 -env ${{env.ENVIRONMENT}} -subscriptionId $${{env.ARM_SUBSCRIPTION_ID}} -resourceGroupName ${{env.STATE_RESOURCE_GROUP_NAME}} -storageAccountName ${{env.STATE_STORAGE_ACCOUNT_NAME}} -containerName ${{env.STATE_CONTAINER_NAME}}
       - name: 'Install Terraform'
         uses: hashicorp/setup-terraform@v3
         with:
