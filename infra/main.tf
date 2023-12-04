@@ -188,8 +188,8 @@ resource "azurerm_storage_account" "unity_catalog_metastore_storage" {
   resource_group_name      = azurerm_resource_group.unity_catalog_metastore_rg[0].name
   name                     = "stdtypeucmetastore"
   location                 = var.location
-  account_tier             = "Premium" # For UC metastore, premium is needed for some reason
-  account_replication_type = "ZRS"
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
   tags                     = local.common_tags
 
   account_kind   = "StorageV2"
@@ -215,7 +215,6 @@ resource "databricks_metastore" "metastore" {
     azurerm_storage_container.unity_catalog[0].name,
   azurerm_storage_account.unity_catalog_metastore_storage[0].name)
   owner         = "contact@innovion.nl"
-  region        = "westeurope"
   force_destroy = true
   depends_on    = [module.databricks_workspace]
 }
