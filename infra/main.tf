@@ -188,7 +188,7 @@ resource "azurerm_storage_account" "unity_catalog_metastore_storage" {
   resource_group_name      = azurerm_resource_group.unity_catalog_metastore_rg[0].name
   name                     = "stdtypeucmetastore"
   location                 = var.location
-  account_tier             = "Standard"
+  account_tier             = "Premium" # For UC metastore, premium is needed for some reason
   account_replication_type = "ZRS"
   tags                     = local.common_tags
 
