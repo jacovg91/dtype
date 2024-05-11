@@ -221,3 +221,9 @@ resource "databricks_metastore" "metastore" {
   force_destroy = true
   depends_on    = [module.databricks_workspace]
 }
+
+module "unity_catalog" {
+  source =  "./modules/unity-catalog"
+  workspace_id = module.databricks_workspace.databricks_workspace_id
+  metastore_id = databricks_metastore.metastore.id
+}
