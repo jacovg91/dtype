@@ -223,7 +223,7 @@ resource "databricks_metastore" "metastore" {
 }
 
 module "unity_catalog" {
-  source       = "./modules/databricks/unity-catalog"
+  source = "./modules/databricks/unity-catalog"
 
   databricks_workspace_id = module.databricks_workspace.databricks_workspace_id
   metastore_id            = databricks_metastore.metastore.id
