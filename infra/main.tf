@@ -211,6 +211,9 @@ resource "azurerm_storage_container" "unity_catalog" {
 resource "databricks_metastore" "metastore" {
   count = length(azurerm_resource_group.unity_catalog_metastore_rg)
   name  = "dtype-store-we"
+
+  region = "westeurope"
+
   storage_root = format("abfss://%s@%s.dfs.core.windows.net/",
     azurerm_storage_container.unity_catalog[0].name,
   azurerm_storage_account.unity_catalog_metastore_storage[0].name)
