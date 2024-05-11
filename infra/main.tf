@@ -215,6 +215,6 @@ resource "databricks_metastore" "metastore" {
     azurerm_storage_container.unity_catalog[0].name,
   azurerm_storage_account.unity_catalog_metastore_storage[0].name)
   owner         = "contact@innovion.nl"
-  #force_destroy = true
+  force_destroy = true
   depends_on    = [module.databricks_workspace]
 }
