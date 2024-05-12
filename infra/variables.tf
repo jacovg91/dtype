@@ -25,6 +25,6 @@ variable "databricks_mounts" {
 }
 
 variable "databricks_account_id" {
-  type = string
+  type    = string
   default = "e36e9f01-4c96-4512-b368-ccdd3ce548b1"
 }
