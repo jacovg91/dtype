@@ -23,3 +23,8 @@ variable "databricks_mounts" {
   type    = set(string)
   default = ["lake"]
 }
+
+variable "databricks_account_id" {
+  type = string
+  default = "e36e9f01-4c96-4512-b368-ccdd3ce548b1"
+}
