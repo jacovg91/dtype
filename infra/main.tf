@@ -228,5 +228,5 @@ module "unity_catalog" {
   databricks_workspace_id  = module.databricks_workspace.databricks_workspace_id
   databricks_workspace_url = module.databricks_workspace.databricks_workspace_url
   databricks_account_id    = var.databricks_account_id
-  metastore_id             = databricks_metastore.metastore.id
+  metastore_id             = databricks_metastore.metastore[0].id
 }
