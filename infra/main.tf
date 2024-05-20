@@ -50,7 +50,7 @@ resource "azurerm_resource_group" "databricks_rg" {
 }
 
 resource "azurerm_resource_group" "unity_catalog_metastore_rg" {
-  count    = var.environment == "prd" ? 1 : 0
+  count    = var.environment == "dev" ? 1 : 0
   name     = "rg-metastore-dtype"
   location = var.location
   tags     = local.common_tags
@@ -182,51 +182,15 @@ resource "databricks_mount" "mounting_filesystems" {
   ]
 }
 
-# Unity Catalog (only deploy once on prd since you can only have one metastore in one region)
-resource "azurerm_storage_account" "unity_catalog_metastore_storage" {
-  count                    = length(azurerm_resource_group.unity_catalog_metastore_rg)
-  resource_group_name      = azurerm_resource_group.unity_catalog_metastore_rg[0].name
-  name                     = "stdtypeucmetastore"
-  location                 = var.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  tags                     = local.common_tags
-
-  account_kind   = "StorageV2"
-  is_hns_enabled = true
-  access_tier    = "Hot"
-
-  enable_https_traffic_only = true
-  min_tls_version           = "TLS1_2"
-
-  depends_on = [module.databricks_workspace]
-}
-
-resource "azurerm_storage_container" "unity_catalog" {
-  count                = length(azurerm_resource_group.unity_catalog_metastore_rg)
-  name                 = "metastore"
-  storage_account_name = azurerm_storage_account.unity_catalog_metastore_storage[count.index].name
-}
-
-resource "databricks_metastore" "metastore" {
-  count = length(azurerm_resource_group.unity_catalog_metastore_rg)
-  name  = "dtype-store-we"
-
-  region = "westeurope"
-
-  storage_root = format("abfss://%s@%s.dfs.core.windows.net/",
-    azurerm_storage_container.unity_catalog[0].name,
-  azurerm_storage_account.unity_catalog_metastore_storage[0].name)
-  owner         = "contact@innovion.nl"
-  force_destroy = true
-  depends_on    = [module.databricks_workspace]
-}
-
+# Unity Catalog 
+# (only deploy once on dev since you can only have one metastore in one region, then reference everything on prd.)
 module "unity_catalog" {
   source = "./modules/databricks/unity-catalog"
+  environment              =  var.environment
+  location                 =  var.location
 
+  unity_catalog_resource_group_name = azurerm_resource_group.unity_catalog_metastore_rg.name
   databricks_workspace_id  = module.databricks_workspace.databricks_workspace_workspace_id
   databricks_workspace_url = module.databricks_workspace.databricks_workspace_url
   databricks_account_id    = var.databricks_account_id
-  metastore_id             = databricks_metastore.metastore[0].id
 }
