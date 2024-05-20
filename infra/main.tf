@@ -185,12 +185,12 @@ resource "databricks_mount" "mounting_filesystems" {
 # Unity Catalog 
 # (only deploy once on dev since you can only have one metastore in one region, then reference everything on prd.)
 module "unity_catalog" {
-  source = "./modules/databricks/unity-catalog"
-  environment              =  var.environment
-  location                 =  var.location
+  source      = "./modules/databricks/unity-catalog"
+  environment = var.environment
+  location    = var.location
 
   unity_catalog_resource_group_name = azurerm_resource_group.unity_catalog_metastore_rg.name
-  databricks_workspace_id  = module.databricks_workspace.databricks_workspace_workspace_id
-  databricks_workspace_url = module.databricks_workspace.databricks_workspace_url
-  databricks_account_id    = var.databricks_account_id
+  databricks_workspace_id           = module.databricks_workspace.databricks_workspace_workspace_id
+  databricks_workspace_url          = module.databricks_workspace.databricks_workspace_url
+  databricks_account_id             = var.databricks_account_id
 }

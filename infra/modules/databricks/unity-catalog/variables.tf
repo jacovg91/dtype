@@ -1,6 +1,6 @@
 variable "environment" {
   description = "The environment."
-  type        = string  
+  type        = string
 }
 
 variable "location" {
@@ -10,7 +10,7 @@ variable "location" {
 
 variable "unity_catalog_resource_group_name" {
   description = "The name of the resource group for the UC metastore."
-  type = string
+  type        = string
 }
 
 variable "common_tags" {
